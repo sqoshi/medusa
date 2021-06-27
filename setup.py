@@ -1,8 +1,11 @@
+import os
+import sys
+
 from setuptools import setup
 
 
 def readfile(filename):
-    with open(filename, 'r+') as f:
+    with open(filename, "r+") as f:
         return f.read()
 
 
@@ -10,16 +13,20 @@ setup(
     name="medusa",
     version="1.0.0",
     description="Photo editor helpful for ML image preprocessing.",
-    long_description=readfile('README.md'),
+    long_description=readfile("README.md"),
     url="https://github.com/sqoshi/medusa",
     author="Piotr Popis",
     author_email="piotrpopis@icloud.com",
     license="MIT",
-    py_modules=['run'],
+    py_modules=["run", "converter.converter"],
     zip_safe=False,
     entry_points={
-        'console_scripts': [
-            'medusa = run:main',
+        "console_scripts": [
+            "medusa = run:main",
         ]
     },
+    install_requires=[
+        "Pillow==8.2.0",
+        "termcolor==1.1.0",
+    ]
 )
