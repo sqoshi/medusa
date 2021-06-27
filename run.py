@@ -6,6 +6,7 @@ from enum import Enum
 import termcolor
 
 from converter import converter
+from logger.time_logger import TimeLogger
 
 
 def print_welcome():
@@ -37,6 +38,6 @@ def main():
     args = parser.parse_args(sys.argv[1:2])
 
     print_welcome()
-
+    logger = TimeLogger()
     if args.command is Command.convert:
-        converter.run()
+        converter.run(logger)

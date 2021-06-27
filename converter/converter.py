@@ -13,10 +13,11 @@ from converter.progress_bar import printProgressBar
 
 
 class Converter:
-    def __init__(self, output_directory):
+    def __init__(self, output_directory, logger):
+        self.logger = logger
         self.input_directory = None
         self.images_list = None
-        self.output_directory = output_directory if output_directory else os.getcwd()
+        self.output_directory = output_directory
 
     def is_image(self, f):
         return isfile(join(self.input_directory, f)) and any(
@@ -47,7 +48,7 @@ class Converter:
             exit()
 
     def standardize_images(self, image_ext):
-        if self.output_directory not in os.listdir():
+        if self.output_directory and self.output_directory not in os.listdir():
             makedirs(self.output_directory)
 
         printProgressBar(
@@ -98,22 +99,23 @@ def parse_args():
     return parser.parse_args(sys.argv[2:])
 
 
-def main(path, output_directory, image_ext):
-    c = Converter(output_directory)
+def main(path, output_directory, image_ext, logger):
+    c = Converter(output_directory, logger)
     c.input(path)
     c.standardize_images(image_ext)
+    logger.log_time("Conversion")
+    termcolor.cprint("Conversion finished.", "green")
 
 
-def run():
+def run(logger):
     args = parse_args()
-    print(args)
     if args.filename:
-        main(args.filename, None, str(args.img_ext))
+        main(args.filename, None, str(args.img_ext), logger)
     elif args.input_dir:
-        main(args.input_dir, args.output_dir, str(args.img_ext))
+        main(args.input_dir, args.output_dir, str(args.img_ext), logger)
     else:
         termcolor.cprint(
-            f"Converter requires a --input-dir flag to specify directory of unconverted images. "
+            f"Converter requires an --input-dir flag to specify directory of unconverted images. "
             f"Using hardcoded path: /home/piotr/Documents/bsc-thesis/mc-dataset",
             "red",
         )
@@ -121,4 +123,5 @@ def run():
             "/home/piotr/Documents/bsc-thesis/mc-dataset",
             args.output_dir,
             str(args.img_ext),
+            logger
         )
