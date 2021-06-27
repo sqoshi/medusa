@@ -1,7 +1,4 @@
-import os
-import sys
-
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def readfile(filename):
@@ -18,7 +15,8 @@ setup(
     author="Piotr Popis",
     author_email="piotrpopis@icloud.com",
     license="MIT",
-    py_modules=["run", "converter.converter"],
+    py_modules=["run"],
+    packages=find_packages(),
     zip_safe=False,
     entry_points={
         "console_scripts": [
@@ -28,5 +26,5 @@ setup(
     install_requires=[
         "Pillow==8.2.0",
         "termcolor==1.1.0",
-    ]
+    ],
 )
