@@ -1,21 +1,10 @@
 import argparse
-import shutil
 import sys
 from enum import Enum
 
-import termcolor
-
 from converter import converter
+from informational_messages.welcome import print_welcome
 from logger.time_logger import TimeLogger
-
-
-def print_welcome():
-    limit = shutil.get_terminal_size().columns
-    welcome_msg = "Welcome in medusa. 🐍️"
-    spacer = int((limit - len(welcome_msg)) / 2) * " "
-    print(limit * "=")
-    termcolor.cprint(spacer + welcome_msg, "green")
-    print(limit * "=")
 
 
 class Command(Enum):

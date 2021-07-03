@@ -1,5 +1,7 @@
 from setuptools import setup, find_packages
 
+from informational_messages.welcome import print_welcome
+
 
 def readfile(filename):
     with open(filename, "r+") as f:
@@ -28,3 +30,5 @@ setup(
         "termcolor==1.1.0",
     ],
 )
+
+print_welcome()
