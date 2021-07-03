@@ -75,7 +75,11 @@ class Converter:
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "filename", type=str, nargs="?", default=None, help="Single file to convert"
+        "filename",
+        type=str,
+        nargs="?",
+        default=None,
+        help="Single file to convert"
     )
     parser.add_argument(
         "--input-dir",
@@ -87,14 +91,14 @@ def parse_args():
         "--output-dir",
         type=str,
         default="converted_images",
-        help="Path to directory of saved images.",
+        help="Name of directory in which converted images will be saved.",
     )
     parser.add_argument(
         "--img-ext",
         type=ImageExtension,
         choices=list(ImageExtension),
         default=ImageExtension.png,
-        help="Specify goal image extension.",
+        help="Specify target image extension.",
     )
     return parser.parse_args(sys.argv[2:])
 
@@ -114,6 +118,7 @@ def run(logger):
     elif args.input_dir:
         main(args.input_dir, args.output_dir, str(args.img_ext), logger)
     else:
+        # temporary
         termcolor.cprint(
             f"Converter requires an --input-dir flag to specify directory of unconverted images. "
             f"Using hardcoded path: /home/piotr/Documents/bsc-thesis/mc-dataset",
