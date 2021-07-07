@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install flake8 vulture mypy isort black
+          python -m pip install flake8 vulture mypy==0.770 isort black
       - name: Code fromat black and isort
         run: |
           black .
