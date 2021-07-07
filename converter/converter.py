@@ -1,8 +1,7 @@
 import argparse
 import os
 import sys
-from os import listdir
-from os import makedirs
+from os import listdir, makedirs
 from os.path import isfile, join
 
 import termcolor
@@ -75,11 +74,7 @@ class Converter:
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "filename",
-        type=str,
-        nargs="?",
-        default=None,
-        help="Single file to convert"
+        "filename", type=str, nargs="?", default=None, help="Single file to convert"
     )
     parser.add_argument(
         "--input-dir",
@@ -128,5 +123,17 @@ def run(logger):
             "/home/piotr/Documents/bsc-thesis/mc-dataset",
             args.output_dir,
             str(args.img_ext),
-            logger
+            logger,
         )
+
+
+def asd():
+    print()
+    print()
+    print()
+    print()
+    print()
+
+
+def xddd():
+    t = 1

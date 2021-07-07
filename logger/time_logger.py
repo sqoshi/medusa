@@ -18,9 +18,11 @@ class TimeLogger:
 
     def log_time(self, name=None):
         seconds = self.beautify(self.measure_time())
-        color = 'red' if seconds > 60 else "green"  # longer than one minute
+        color = "red" if seconds > 60 else "green"  # longer than one minute
         print(
-            termcolor.colored(f"[{name}] Executed in " if name else "Executed in ", "yellow") +
-            termcolor.colored(str(seconds), color) +
-            termcolor.colored(f" seconds.", "yellow")
+            termcolor.colored(
+                f"[{name}] Executed in " if name else "Executed in ", "yellow"
+            )
+            + termcolor.colored(str(seconds), color)
+            + termcolor.colored(f" seconds.", "yellow")
         )
