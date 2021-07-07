@@ -2,7 +2,11 @@ from matplotlib import pyplot
 from mtcnn.mtcnn import MTCNN
 
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = "2"
+# error fixes
+# FIXED :sudo ln -s /usr/local/cuda-11.0/targets/x86_64-linux/lib/libcusolver.so.11 /home/piotr/Documents/medus/venv/lib/python3.8/site-packages/tensorflow/python/libcusolver.so.11
+# @reboot root for a in /sys/bus/pci/devices/*; do echo 0 | tee -a $a/numa_node; done > /dev/null  APPEND TO  /etc/crontab
+
+os.environ['CUDA_VISIBLE_DEVICES'] = "0"
 
 
 # draw each face separately
@@ -23,7 +27,7 @@ def draw_faces(filename, result_list):
     pyplot.show()
 
 
-filename = 'forum.jpeg'
+filename = 'forum.jpg'
 pixels = pyplot.imread(filename)
 detector = MTCNN()
 faces = detector.detect_faces(pixels)
