@@ -38,7 +38,9 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: mypy
         run: |
-          mypy --install-types .
+          rm -rf __init__.py
+          mypy --ignore-missing-imports .
+          touch __init__.py
       - name: vulture
         run: |
           vulture . --min-confidence 100 --sort-by-size
