@@ -1,15 +1,15 @@
 import termcolor
 
 
-def printProgressBar(
-    iteration,
-    total,
-    prefix="",
-    suffix="",
-    decimals=1,
-    length=100,
-    fill=termcolor.colored("█", "green"),
-    print_end="\r",
+def print_progress_bar(
+        iteration,
+        total,
+        prefix="",
+        suffix="",
+        decimals=1,
+        length=100,
+        fill=termcolor.colored("█", "green"),
+        print_end="\r",
 ):
     percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
     filled_len = int(length * iteration // total)

@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-from informational_messages.welcome import print_welcome
+from beautifiers.welcome import print_welcome
 
 
 def readfile(filename):

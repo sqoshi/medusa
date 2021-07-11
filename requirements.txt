@@ -1,3 +1,3 @@
-mtcnn
-termcolor
-matplotlib
+mtcnn==0.1.0
+termcolor==1.1.0
+matplotlib==3.4.2
