@@ -8,6 +8,17 @@ from termcolor import cprint, colored
 from handled_types.image_type import ImageExtension
 
 
+def validate():
+    yes = {'yes', 'y', 'ye', ''}
+    no = {'no', 'n'}
+    choice = input().lower()
+    if choice in yes:
+        return True
+    if choice in no:
+        return False
+    cprint("Please respond with 'yes' or 'no'", "orange")
+
+
 def flatten(mult_dim_list):
     return list(itertools.chain(*mult_dim_list))
 
@@ -44,23 +55,12 @@ class CustomDatasetInspector:
                     matches.append((f1, f2))
                     return self.match_images_recursive(files, matches)
 
-    @staticmethod
-    def validate_divider():
-        yes = {'yes', 'y', 'ye', ''}
-        no = {'no', 'n'}
-        choice = input().lower()
-        if choice in yes:
-            return True
-        if choice in no:
-            return False
-        cprint("Please respond with 'yes' or 'no'", "orange")
-
-    def determine_divider(self, matches):
+    @classmethod
+    def determine_divider(cls, matches):
         f1, f2 = matches.pop()
         f1, f2 = (f1, f2) if len(f1) > f2 else (f2, f1)
         divider = f1.replace(f2, "")
-
-        self.validate_divider()
+        validate()
         print(colored("Image divider is ", "orange") + colored("{divider}", "green"))
         return divider
 

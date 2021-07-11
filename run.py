@@ -4,7 +4,7 @@ from enum import Enum
 
 import converter
 import detector
-from beautifiers.welcome import print_welcome
+from beautifiers.printers import print_header
 from loggers.logger import Logger
 
 
@@ -28,9 +28,11 @@ def main():
     )
     args = parser.parse_args(sys.argv[1:2])
 
-    print_welcome()
+    print_header()
     logger = Logger()
     if args.command is Command.convert:
         converter.runner.run(logger)
     elif args.command is Command.detect:
         detector.runner.run(logger)
+
+    print_header("See you soon in medusa!")

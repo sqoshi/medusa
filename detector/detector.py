@@ -1,4 +1,5 @@
 import os
+from collections import namedtuple
 
 from PIL import Image
 from mtcnn.mtcnn import MTCNN
@@ -9,6 +10,8 @@ from templates.dataset_worker import DatasetAnalyzer
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
+Point = namedtuple("Point", "x y")
+
 
 class FaceDetector(DatasetAnalyzer):
     def __init__(self, output_directory, logger):
@@ -16,54 +19,33 @@ class FaceDetector(DatasetAnalyzer):
         self.input_directory = None
         self.images_list = None
         self.output_directory = output_directory
+        self.detector = MTCNN()  # not sure if detector maybe re-used
 
-    @classmethod
-    def extract_face(cls, filename, required_size=(160, 160)):
-        # load image from file
-        image = Image.open(filename)
-        # convert to RGB, if needed
-        image = image.convert('RGB')
-        # convert to array
-        pixels = asarray(image)
-        # create the detector, using default weights
-        detector = MTCNN()
-        # detect faces in the image
-        results = detector.detect_faces(pixels)
-        # extract the bounding box from the first face
+    @staticmethod
+    def _fix_cords(results):
         x1, y1, width, height = results[0]['box']
-        # bug fix
-        x1, y1 = abs(x1), abs(y1)
-        x2, y2 = x1 + width, y1 + height
-        # extract the face
-        face = pixels[y1:y2, x1:x2]
-        # resize pixels to the model size
-        image = Image.fromarray(face)
-        image = image.resize(required_size)
-        face_array = asarray(image)
-        return face_array, image
+        x2, y2 = abs(x1) + width, abs(y1) + height
+        return Point(x1, y1), Point(x2, y2)
+
+    def extract_face(self, filename, required_size=(160, 160)):
+        image = Image.open(filename).convert("RGB")
+        pixels = asarray(image)
+        results = self.detector.detect_faces(pixels)
+        p1, p2 = self._fix_cords(results)
+        face = pixels[p1.y:p2.y, p1.x:p2.x]
+        image = Image.fromarray(face).resize(required_size)
+        return image  # , asarray(image)
 
     def detect_faces(self):
-        if self.output_directory and self.output_directory not in os.listdir():
-            os.makedirs(self.output_directory)
-
-        # enumerate files
-        print_progress_bar(
-            0, len(self.images_list), prefix="Progress:", suffix="Complete", length=50
-        )
+        self.create_output_directory()
 
         for i, file in enumerate(self.images_list):
-            print_progress_bar(
-                i + 1,
-                len(self.images_list),
-                prefix="Progress:",
-                suffix="Complete",
-                length=50,
-            )
+            print(file)
+            print_progress_bar(i, len(self.images_list) - 1, prefix="Progress:", suffix="Complete", length=50)
 
-            face, img = self.extract_face(file)
+            img = self.extract_face(file)
             image_ext = 'jpeg'
+
             name = file.split("/")[-1].split(".")[0]
-            output_filename = (
-                f"{self.output_directory}/{name}" if self.output_directory else name
-            )
+            output_filename = f"{self.output_directory}/{name}" if self.output_directory else name
             img.save(f"{output_filename}.{image_ext}", image_ext)

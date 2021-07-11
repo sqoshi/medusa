@@ -46,16 +46,17 @@ def run(logger):
     args = parse_args()
     if args.filename:
         main(args.filename, None, logger)
-    if args.input_dir:
+    elif args.input_dir:
         main(args.input_dir, args.output_dir, logger)
-    # temporary
-    termcolor.cprint(
-        f"Converter requires an --input-dir flag to specify directory of JPEG images."
-        f"Using hardcoded path: converted_images",
-        "red"
-    )
-    main(
-        "converted_images",
-        args.output_dir,
-        logger
-    )
+    else:
+        # temporary
+        termcolor.cprint(
+            f"Detector requires an --input-dir flag to specify directory of JPEG images."
+            f"Using hardcoded path: converted_images",
+            "red"
+        )
+        main(
+            "converted_images",
+            args.output_dir,
+            logger
+        )

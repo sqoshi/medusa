@@ -1,7 +1,5 @@
 from setuptools import find_packages, setup
 
-from beautifiers.welcome import print_welcome
-
 
 def readfile(filename):
     with open(filename, "r+") as f:
@@ -30,5 +28,3 @@ setup(
         "termcolor==1.1.0",
     ],
 )
-
-print_welcome()

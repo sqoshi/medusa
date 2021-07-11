@@ -1,9 +1,12 @@
+import os
+import shutil
 from abc import ABC, abstractmethod
 from os import listdir
 from os.path import isfile, join
 
 from termcolor import cprint, colored
 
+from dataset_inspector.inspector import validate
 from handled_types.image_type import ImageExtension
 
 
@@ -39,7 +42,19 @@ class DatasetAnalyzer(ABC):
             + colored(self.input_directory, "red")
         )
         if not len(self.images_list):
+            cprint(f"{self.input_directory} is empty.", "red")
             exit()
+
+    def create_output_directory(self):
+        if self.output_directory and self.output_directory not in os.listdir():
+            os.makedirs(self.output_directory)
+        elif self.output_directory in os.listdir():
+            if len(os.listdir(self.output_directory)):
+                print(colored(f"{self.output_directory}", "red") +
+                      colored(" is not empty! Do you want to remove its contents? [Y/n]", "yellow"))
+                if validate():
+                    shutil.rmtree(self.output_directory)
+                    os.makedirs(self.output_directory)
 
     @input_directory.setter
     def input_directory(self, value):
