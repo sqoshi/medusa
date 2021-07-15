@@ -1,7 +1,7 @@
 from PIL import Image
 
-from beautifiers.progress_bar import print_progress_bar
-from templates.dataset_worker import DatasetAnalyzer
+from src.beautifiers.progress_bar import print_progress_bar
+from src.templates.dataset_worker import DatasetAnalyzer
 
 
 class Converter(DatasetAnalyzer):

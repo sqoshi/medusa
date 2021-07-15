@@ -2,10 +2,9 @@ import argparse
 import sys
 from enum import Enum
 
-import converter
-import detector
-from beautifiers.printers import print_header
-from loggers.logger import Logger
+from src.beautifiers.printers import print_header
+from src.commands.converter import converter, detector
+from src.loggers.logger import Logger
 
 
 class Command(Enum):
@@ -26,6 +25,7 @@ def main():
         choices=list(Command),
         help="Command option.",
     )
+
     args = parser.parse_args(sys.argv[1:2])
 
     print_header()

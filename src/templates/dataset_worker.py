@@ -6,8 +6,8 @@ from os.path import isfile, join
 
 from termcolor import cprint, colored
 
-from dataset_inspector.inspector import validate
-from handled_types.image_type import ImageExtension
+from src.dataset_inspector.inspector import validate
+from src.handled_types.image_type import ImageExtension
 
 
 class DatasetAnalyzer(ABC):

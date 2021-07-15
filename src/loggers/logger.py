@@ -1,5 +1,5 @@
-from loggers.time_logger import TimeLogger
-from loggers.warning_logger import WarningLogger
+from src.loggers.time_logger import TimeLogger
+from src.loggers.warning_logger import WarningLogger
 
 
 class Logger:

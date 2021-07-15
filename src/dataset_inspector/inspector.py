@@ -5,7 +5,7 @@ from os.path import join
 
 from termcolor import cprint, colored
 
-from handled_types.image_type import ImageExtension
+from src.handled_types.image_type import ImageExtension
 
 
 def validate():

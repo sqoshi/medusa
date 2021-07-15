@@ -5,8 +5,8 @@ from PIL import Image
 from mtcnn.mtcnn import MTCNN
 from numpy import asarray
 
-from beautifiers.progress_bar import print_progress_bar
-from templates.dataset_worker import DatasetAnalyzer
+from src.beautifiers.progress_bar import print_progress_bar
+from src.templates.dataset_worker import DatasetAnalyzer
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
