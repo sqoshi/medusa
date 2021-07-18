@@ -1,7 +1,7 @@
 from PIL import Image
 
-from src.beautifiers.progress_bar import print_progress_bar
-from src.templates.dataset_worker import DatasetAnalyzer
+from medusa.beautifiers.progress_bar import print_progress_bar
+from medusa.templates.dataset_worker import DatasetAnalyzer
 
 
 class Converter(DatasetAnalyzer):

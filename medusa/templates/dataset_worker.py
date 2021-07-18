@@ -6,8 +6,8 @@ from os.path import isfile, join
 
 from termcolor import cprint, colored
 
-from src.dataset_inspector.inspector import validate
-from src.handled_types.image_type import ImageExtension
+from medusa.dataset_inspector.inspector import validate
+from medusa.handled_types.image_type import ImageExtension
 
 
 class DatasetAnalyzer(ABC):
@@ -35,12 +35,13 @@ class DatasetAnalyzer(ABC):
     def input(self, path):
         self.input_directory = path
         self.images_list = self.find_images()
-        cprint(
-            colored("Found ", "yellow")
-            + colored(str(len(self.images_list)), "red")
-            + colored(" images in ", "yellow")
-            + colored(self.input_directory, "red")
-        )
+        if len(self.images_list) > 1:
+            cprint(
+                colored("Found ", "yellow")
+                + colored(str(len(self.images_list)), "red")
+                + colored(" images in ", "yellow")
+                + colored(self.input_directory, "red")
+            )
         if not len(self.images_list):
             cprint(f"{self.input_directory} is empty.", "red")
             exit()
