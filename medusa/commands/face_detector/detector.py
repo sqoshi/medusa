@@ -18,11 +18,11 @@ Point = namedtuple("Point", "x y")
 
 
 class FaceDetector(DatasetAnalyzer):
-    def __init__(self, output_directory, logger, image_ext='jpeg'):
+    def __init__(self, output_directory, img_size, image_ext, logger=None):
         self.logger = logger
         self.input_directory = None
         self.images_list = None
-        self.target_size = (160, 160)
+        self.target_size = img_size
         self.output_directory = output_directory
         self.detector = MTCNN()  # not sure if face_detector maybe re-used
         self.target_ext = image_ext
@@ -51,6 +51,11 @@ class FaceDetector(DatasetAnalyzer):
         else:
             cprint(f"Successfully detected face on every image.", "green")
 
+    def save(self, file, img):
+        name = file.split("/")[-1].split(".")[0]
+        output_filename = f"{self.output_directory}/{name}" if self.output_directory else name
+        img.save(f"{output_filename}.{self.target_ext}", self.target_ext)
+
     def detect(self):
         self.create_output_directory()
         failed_files = set()
@@ -58,9 +63,7 @@ class FaceDetector(DatasetAnalyzer):
             print_progress_bar(i, len(self.images_list) - 1, prefix="Progress:", suffix="Complete", length=50)
             try:
                 img = self.extract_face(file)
-                name = file.split("/")[-1].split(".")[0]
-                output_filename = f"{self.output_directory}/{name}" if self.output_directory else name
-                img.save(f"{output_filename}.{self.target_ext}", self.target_ext)
+                self.save(file, img)
             except FaceNotFoundException:
                 failed_files.add(file)
         self.analyze_failed_files(failed_files)

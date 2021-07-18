@@ -20,7 +20,7 @@ class CommandRunner(AbstractRunner):
     def main(self, path, output_directory, image_ext, logger):
         c = Converter(output_directory, logger)
         c.input(path)
-        c.standardize_images(image_ext)
+        c.standardize_images(str(image_ext))
         logger.log_time("Conversion")
         print(colored(f"Conversion finished. Files saved in ", "green") +
               colored(f"{output_directory}", "yellow"))
@@ -28,9 +28,9 @@ class CommandRunner(AbstractRunner):
     def run(self, logger):
         args = self.parse_args()
         if args.filename:
-            self.main(args.filename, None, str(args.img_ext), logger)
+            self.main(args.filename, None, args.img_ext, logger)
         elif args.input_dir:
-            self.main(args.input_dir, args.output_dir, str(args.img_ext), logger)
+            self.main(args.input_dir, args.output_dir, args.img_ext, logger)
         else:
             # temporary
             cprint(

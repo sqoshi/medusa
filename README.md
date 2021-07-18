@@ -30,14 +30,23 @@ Convert images to other image extension.
 
 | argument | default | description|
 |----------|---------|------------|
-| --input-dir | None | Path to directory of images. |
-| --output-dir | converted_images | Name of directory in which converted images will be saved. |
+| --input-dir | None | Path to input directory with images. |
+| --output-dir | converted_images | Output directory path (does not have to exist) |
 | --img-ext | png | Target image extension [ `jpg`,`jpeg`,`webp`,`png`] |
-| filename | None | Allow to convert single image.|
+| first_positional | None | Allow to pass single image.|
 
-### `find-face`
+### `detect`
 
 Find and crop faces in image.
+
+| argument | default | description|
+|----------|---------|------------|
+| --input-dir | None | Path to input directory with images. |
+| --output-dir | detected_faces | Output directory path (does not have to exist) |
+| --img-ext | png | Target image extension [ `jpg`,`jpeg`,`webp`,`png`] |
+| --target-width | 160 | Width of output image.|
+| --target-height | 160 | Height of output image.|
+| first_positional | None | Allow to pass single image.|
 
 ----------------------
 During _*nvidia graphics card*_ setup you may encounter a lot of bugs (TENSORFLOW).
