@@ -35,7 +35,7 @@ Convert images to other image extension.
 | --img-ext | png | Target image extension [ `jpg`,`jpeg`,`webp`,`png`] |
 | first_positional | None | Allow to pass single image.|
 
-### `detect`
+### `detect-faces`
 
 Find and crop faces in image.
 
