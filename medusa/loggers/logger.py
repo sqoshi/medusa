@@ -1,5 +1,5 @@
-from loggers.time_logger import TimeLogger
-from loggers.warning_logger import WarningLogger
+from medusa.loggers.time_logger import TimeLogger
+from medusa.loggers.warning_logger import WarningLogger
 
 
 class Logger:

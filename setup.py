@@ -8,7 +8,7 @@ def readfile(filename):
 
 setup(
     name="medusa",
-    version="1.0.0",
+    version="1.1.0",
     description="Photo editor helpful for ML image preprocessing.",
     long_description=readfile("README.md"),
     url="https://github.com/sqoshi/medusa",
@@ -26,5 +26,6 @@ setup(
     install_requires=[
         "Pillow==8.2.0",
         "termcolor==1.1.0",
+        "mtcnn==0.1.0"
     ],
 )
