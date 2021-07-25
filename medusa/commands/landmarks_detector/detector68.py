@@ -5,9 +5,10 @@ from typing import Optional
 from urllib.error import URLError, HTTPError
 from urllib.request import urlretrieve
 
+import dlib
 import numpy as np
 from _dlib_pybind11 import shape_predictor
-from cv2 import imread, rectangle, putText, FONT_HERSHEY_SIMPLEX, circle, cvtColor, COLOR_BGR2GRAY
+from cv2 import imread, rectangle, putText, FONT_HERSHEY_SIMPLEX, circle, cvtColor, COLOR_BGR2GRAY, imshow, waitKey
 from dlib import get_frontal_face_detector
 from termcolor import cprint, colored
 
@@ -89,14 +90,17 @@ class Landmarks68Detector(DatasetAnalyzer, AbstractDetector):
         print(f"{filename}")
         print(len(rects))
         print(rects)
-        # if not rects:
+        if not rects:
+            d_rect = dlib.rectangle(left=0, top=0, right=160, bottom=160)
+            rects = [d_rect]
+
         #     raise LandmarksNotFoundException
         self.detect_landmarks(rects, image)
 
     def detect_landmarks(self, rects, image):
         # gray = image
         gray = cvtColor(image, COLOR_BGR2GRAY)
-        for (i, rect) in enumerate(rects):
+        for i, rect in enumerate(rects):
             shape = self.predictor(gray, rect)
             shape = shape_to_np(shape)
             x, y, w, h = rect_to_bb(rect)
@@ -104,5 +108,5 @@ class Landmarks68Detector(DatasetAnalyzer, AbstractDetector):
             putText(image, "Face #{}".format(i + 1), (x - 10, y - 10), FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
             for (x, y) in shape:
                 circle(image, (x, y), 1, (0, 0, 255), -1)
-        # imshow("Output", image)
-        # waitKey(0)
+        imshow("Output", image)
+        waitKey(0)

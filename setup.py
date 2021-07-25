@@ -26,6 +26,7 @@ setup(
     install_requires=[
         "Pillow==8.2.0",
         "termcolor==1.1.0",
-        "mtcnn==0.1.0"
+        "mtcnn==0.1.0",
+        "dlib==19.22.0",
     ],
 )

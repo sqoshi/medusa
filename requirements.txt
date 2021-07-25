@@ -4,6 +4,8 @@
 #
 #    pip-compile
 #
+dlib==19.22.0
+    # via medusa (setup.py)
 h5py==3.3.0
     # via keras
 keras==2.4.3

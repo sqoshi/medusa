@@ -90,7 +90,8 @@ class CommandRunner(AbstractRunner):
                 "red"
             )
             self.main(
-                "converted_images",
+                "detected_faces",
+                # "converted_images",
                 args.shape_predictor,
                 args.detection_mode,
                 output_filename,
