@@ -11,6 +11,14 @@ Medusa is a python package helpful in dataset creation or modification.
 
 ## Installation
 
+Pre-requirements:
+
+```shell
+sudo apt-get install build-essential cmake
+sudo apt-get install libgtk-3-dev
+sudo apt-get install libboost-all-dev
+```
+
 `pip install git+https://github.com/sqoshi/medusa.git`
 
 ## Usage

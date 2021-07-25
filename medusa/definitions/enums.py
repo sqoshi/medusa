@@ -29,8 +29,8 @@ class LandmarksFormat(Enum):
 
 class DetectionMode(Enum):
     """Determines how many landmarks will be detected."""
-    basic = 5
-    extensive = 64
+    basic = "basic"
+    extensive = "extensive"
 
-    def __str__(self) -> int:
+    def __str__(self):
         return self.value
