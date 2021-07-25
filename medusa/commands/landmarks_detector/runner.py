@@ -1,36 +1,36 @@
 from termcolor import cprint
 
 from medusa.abstract_models.abstract_runner import AbstractRunner
-from medusa.commands.face_detector.detector import FaceDetector
+from medusa.commands.landmarks_detector.detector_5.detector import Landmarks5Detector
+from medusa.definitions import LandmarksFormat
 
 
 class CommandRunner(AbstractRunner):
     def parse_args(self, terminal_arguments=None):
         terminal_arguments = super().parse_args(terminal_arguments)
-        self.insert_default_args()
+        self.insert_input_file_arg()
+        self.insert_input_dir_arg()
         self.parser.add_argument(
-            "--output-dir",
+            "--output-filename",
             type=str,
-            default="detected_faces",
-            help="Output directory.",
+            default=None,
+            help="Output filename with landmarks coordinates.",
         )
         self.parser.add_argument(
-            "--target-width",
-            type=int,
-            default=160,
-            help="Width of output image.",
+            "--output-format",
+            type=str,
+            choices=list(LandmarksFormat),
+            default=LandmarksFormat.csv,
+            help="Output file format/extension.",
         )
         self.parser.add_argument(
-            "--target-height",
-            type=int,
-            default=160,
-            help="Height of output image.",
+            "--mode"
         )
 
         return self.parser.parse_args(terminal_arguments)
 
     def main(self, path, output_directory, img_size, image_ext, logger):
-        d = FaceDetector(output_directory, img_size, str(image_ext), logger)
+        d = Landmarks5Detector(output_directory, img_size, str(image_ext), logger)
         d.input(path)
         d.detect()
         logger.log_time("Face detection")

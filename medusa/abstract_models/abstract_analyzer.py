@@ -7,11 +7,11 @@ from os.path import isfile, join
 from termcolor import cprint, colored
 
 from medusa.dataset_inspector.inspector import validate
-from medusa.handled_types.image_type import ImageExtension
+from medusa.definitions import ImageExtension
 
 
 class DatasetAnalyzer(ABC):
-
+    """Template/ Parent class of pre-dataset analyzer."""
     @property
     def input_directory(self):
         return self._input_directory

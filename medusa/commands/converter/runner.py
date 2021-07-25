@@ -1,7 +1,7 @@
 from termcolor import cprint, colored
 
+from medusa.abstract_models.abstract_runner import AbstractRunner
 from medusa.commands.converter.converter import Converter
-from medusa.templates.runner_abstract import AbstractRunner
 
 
 class CommandRunner(AbstractRunner):
