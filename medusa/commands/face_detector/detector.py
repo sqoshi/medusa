@@ -46,7 +46,7 @@ class FaceDetector(DatasetAnalyzer):
         return Image.fromarray(face).resize(self.target_size)  # , asarray(image)
 
     @staticmethod
-    def analyze_failed_files(files):
+    def display_failed_files(files):
         if files:
             cprint(f"Face could not be detected on:", "yellow")
             for f in files:
@@ -70,5 +70,4 @@ class FaceDetector(DatasetAnalyzer):
                 self.save_image(file, img)
             except FaceNotFoundException:
                 failed_files.add(file)
-        self.analyze_failed_files(failed_files)
-
+        self.display_failed_files(failed_files)

@@ -1,8 +1,25 @@
+from typing import Tuple
+
 from termcolor import cprint
 
 from medusa.abstract_models.abstract_runner import AbstractRunner
 from medusa.commands.landmarks_detector.detector_5.detector import Landmarks5Detector
-from medusa.definitions import LandmarksFormat
+from medusa.definitions import LandmarksFormat, DetectionMode
+from medusa.exceptions import DetectionModeNotFoundException
+
+
+def has_correct_extension(filename: str) -> bool:
+    if filename:
+        f_as_array = filename.split(".")
+        if len(f_as_array) > 1 and f_as_array[-1] in list(LandmarksFormat):
+            return True
+    return False
+
+
+def define_output_file(args) -> Tuple:
+    if has_correct_extension(args.output_filename):
+        return args.output_filename.split(".")
+    return args.output_filename, args.output_format
 
 
 class CommandRunner(AbstractRunner):
@@ -13,47 +30,58 @@ class CommandRunner(AbstractRunner):
         self.parser.add_argument(
             "--output-filename",
             type=str,
-            default=None,
+            default="landmarks",
             help="Output filename with landmarks coordinates.",
         )
         self.parser.add_argument(
             "--output-format",
-            type=str,
+            type=LandmarksFormat,
             choices=list(LandmarksFormat),
             default=LandmarksFormat.csv,
             help="Output file format/extension.",
         )
         self.parser.add_argument(
-            "--mode"
+            "--detection-mode",
+            type=DetectionMode,
+            default=DetectionMode.basic,
+            help="Gives the choice to find 5 or 68 landmarks."
         )
 
         return self.parser.parse_args(terminal_arguments)
 
-    def main(self, path, output_directory, img_size, image_ext, logger):
-        d = Landmarks5Detector(output_directory, img_size, str(image_ext), logger)
-        d.input(path)
-        d.detect()
-        logger.log_time("Face detection")
-        cprint("Face detection finished.", "green")
+    def main(self, path, detection_mode, output_filename, output_format, logger):
+        if detection_mode == DetectionMode.basic:
+            d = Landmarks5Detector(output_filename, output_format, logger)
+            d.input(path)
+            d.detect()
+            logger.log_time("[5]Landmarks detection")
+        elif detection_mode == DetectionMode.extensive:
+            # todo: 68 landmark detection using `dlib`
+            pass
+            logger.log_time("[68]Landmarks detection")
+        else:
+            raise DetectionModeNotFoundException(detection_mode)
+        cprint("Landmarks detection finished.", "green")
 
     def run(self, logger):
         args = self.parse_args()
-        img_size = (args.target_width, args.target_height)
+        output_filename, output_format = define_output_file(args)
+
         if args.filename:
-            self.main(args.filename, None, img_size, args.img_ext, logger)
+            self.main(args.filename, args.detection_mode, output_filename, output_format, logger)
         elif args.input_dir:
-            self.main(args.input_dir, args.output_dir, img_size, args.img_ext, logger)
+            self.main(args.input_dir, args.detection_mode, output_filename, output_format, logger)
         else:
             # temporary
             cprint(
-                f"Detector requires an --input-dir flag to specify directory of unconverted images. "
-                f"Using hardcoded path: converted_images",
+                f"LandmarkDetector requires an --input-dir flag to specify directory of unconverted images. "
+                f"Using hardcoded path: detected_images",
                 "red"
             )
             self.main(
-                "converted_images",
-                args.output_dir,
-                img_size,
-                args.img_ext,
+                "detected_faces",
+                args.detection_mode,
+                output_filename,
+                output_format,
                 logger
             )

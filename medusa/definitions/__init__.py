@@ -1,1 +1,1 @@
-from enums import LandmarksFormat, ImageExtension, DetectionMode
+from .enums import LandmarksFormat, ImageExtension, DetectionMode

@@ -3,8 +3,9 @@ import warnings
 from os import listdir
 from os.path import join
 
-from medusa.definitions.image_type import ImageExtension
 from termcolor import cprint, colored
+
+from medusa.definitions import ImageExtension
 
 
 def validate():

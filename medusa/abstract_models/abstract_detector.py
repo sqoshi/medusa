@@ -1,9 +1,10 @@
 from termcolor import cprint
 
 
-class Detector:
+class LandmarkDetector:
+
     @staticmethod
-    def analyze_failed_files(files):
+    def display_failed_files(files):
         if files:
             cprint(f"Face could not be detected on:", "yellow")
             for f in files:
