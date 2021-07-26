@@ -4,13 +4,16 @@ from abc import ABC, abstractmethod
 
 from termcolor import cprint, colored
 
+from medusa.beautifiers.progress_bar import print_progress_bar
 from medusa.definitions import LandmarksFormat
+from medusa.exceptions import LandmarksNotFoundException
 
 
 class AbstractDetector(ABC):
     output_filename = None
     output_format = None
     detector = None
+    images_list = None
     landmarks = {}
 
     def save_landmarks_coordinates(self):
@@ -39,9 +42,20 @@ class AbstractDetector(ABC):
             cprint(f"Successfully detected face on every image.", "green")
 
     @abstractmethod
-    def detect(self):
+    def extract_landmarks(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def extract_landmarks(self, *args, **kwargs):
+    def update_landmarks(self, *args, **kwargs):
         pass
+
+    def detect(self):
+        failed_files = set()
+        for i, file in enumerate(self.images_list):
+            print_progress_bar(i, len(self.images_list) - 1, prefix="Progress:", suffix="Complete", length=50)
+            try:
+                self.extract_landmarks(file)
+            except LandmarksNotFoundException:
+                failed_files.add(file)
+        self.display_failed_files(failed_files)
+        self.save_landmarks_coordinates()

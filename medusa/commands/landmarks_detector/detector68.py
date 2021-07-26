@@ -8,14 +8,12 @@ from urllib.request import urlretrieve
 import dlib
 import numpy as np
 from _dlib_pybind11 import shape_predictor
-from cv2 import imread, rectangle, putText, FONT_HERSHEY_SIMPLEX, circle, cvtColor, COLOR_BGR2GRAY, imshow, waitKey
+from cv2 import imread, COLOR_BGR2GRAY, cvtColor
 from dlib import get_frontal_face_detector
 from termcolor import cprint, colored
 
 from medusa.abstract_models.abstract_analyzer import DatasetAnalyzer
 from medusa.abstract_models.abstract_detector import AbstractDetector
-from medusa.beautifiers.progress_bar import print_progress_bar
-from medusa.exceptions import LandmarksNotFoundException
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -33,6 +31,13 @@ def shape_to_np(shape, dtype="int"):
     for i in range(0, 68):
         coords[i] = (shape.part(i).x, shape.part(i).y)
     return coords
+
+
+def shape_to_dict(shape):
+    result = {}
+    for i in range(0, 68):
+        result[i] = (shape.part(i).x, shape.part(i).y)
+    return result
 
 
 class Landmarks68Detector(DatasetAnalyzer, AbstractDetector):
@@ -68,45 +73,59 @@ class Landmarks68Detector(DatasetAnalyzer, AbstractDetector):
                 cprint("Error occurred during model decompression.", "red")
                 cprint("Please download model manually and input filepath via arguments. Process halt.", "red")
                 exit()
-
         else:
             # todo search in /home for predictor
             cprint("Shape predictor not found. Detection interrupted.", "red")
             exit()
 
-    def detect(self):
-        failed_files = set()
-        for i, file in enumerate(self.images_list):
-            print_progress_bar(i, len(self.images_list) - 1, prefix="Progress:", suffix="Complete", length=50)
-            try:
-                self.extract_landmarks(file)
-            except LandmarksNotFoundException:
-                failed_files.add(file)
-        self.display_failed_files(failed_files)
+    def update_landmarks(self, filename, landmarks_dictionary):
+        self.landmarks[filename] = landmarks_dictionary
 
     def extract_landmarks(self, filename: str):
         image = imread(filename)
-        rects = self.detector(image, 1)
-        print(f"{filename}")
-        print(len(rects))
-        print(rects)
-        if not rects:
-            d_rect = dlib.rectangle(left=0, top=0, right=160, bottom=160)
-            rects = [d_rect]
-
-        #     raise LandmarksNotFoundException
-        self.detect_landmarks(rects, image)
-
-    def detect_landmarks(self, rects, image):
-        # gray = image
+        height, width, _ = image.shape
+        rect = dlib.rectangle(left=0, top=0, right=height, bottom=height)  # assume photo is a single front face
         gray = cvtColor(image, COLOR_BGR2GRAY)
-        for i, rect in enumerate(rects):
-            shape = self.predictor(gray, rect)
-            shape = shape_to_np(shape)
-            x, y, w, h = rect_to_bb(rect)
-            rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            putText(image, "Face #{}".format(i + 1), (x - 10, y - 10), FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-            for (x, y) in shape:
-                circle(image, (x, y), 1, (0, 0, 255), -1)
-        imshow("Output", image)
-        waitKey(0)
+        shape = self.predictor(gray, rect)
+        self.update_landmarks(filename, shape_to_dict(shape))
+        # shape = shape_to_np(shape)
+        # x, y, w, h = rect_to_bb(rect)
+        # rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        # putText(image, "Face", (x - 10, y - 10), FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+        # for (x, y) in shape:
+        #     circle(image, (x, y), 1, (0, 0, 255), -1)
+        # imshow("Output", image)
+        # waitKey(0)
+
+# fixme: for multiple images
+
+#         print(shape)
+#         shape = shape_to_np(shape)
+#         x, y, w, h = rect_to_bb(rect)
+#         rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+#         putText(image, "Face #{}".format(i + 1), (x - 10, y - 10), FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+#         for (x, y) in shape:
+#             circle(image, (x, y), 1, (0, 0, 255), -1)
+# rects = self.detector(image, 1)
+# if len(rects) > 1:
+#     cprint(f"Multiple face boxes found on {filename} ", "red")
+# elif not rects:
+#     height, width, _ = image.shape
+#     rects = [dlib.rectangle(left=0, top=0, right=height, bottom=height)]
+# self.detect_landmarks(rects, image)
+
+# def detect_landmarks(self, rects, image):
+#     # gray = image
+#     gray = cvtColor(image, COLOR_BGR2GRAY)
+#     for i, rect in enumerate(rects):
+#         shape = self.predictor(gray, rect)
+#         print(shape)
+#         shape = shape_to_np(shape)
+#         x, y, w, h = rect_to_bb(rect)
+#         rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+#         putText(image, "Face #{}".format(i + 1), (x - 10, y - 10), FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+#         for (x, y) in shape:
+#             circle(image, (x, y), 1, (0, 0, 255), -1)
+#     imshow("Output", image)
+#     waitKey(0)
+#

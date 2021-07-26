@@ -9,7 +9,6 @@ from medusa.abstract_models.abstract_detector import AbstractDetector
 
 from numpy import asarray
 
-from medusa.beautifiers.progress_bar import print_progress_bar
 from medusa.exceptions import LandmarksNotFoundException
 from medusa.abstract_models.abstract_analyzer import DatasetAnalyzer
 
@@ -39,15 +38,3 @@ class Landmarks5Detector(DatasetAnalyzer, AbstractDetector):
         if not results:
             raise LandmarksNotFoundException(filename)
         self.update_landmarks(filename, results)
-
-    def detect(self):
-        failed_files = set()
-        for i, file in enumerate(self.images_list):
-            print_progress_bar(i, len(self.images_list) - 1, prefix="Progress:", suffix="Complete", length=50)
-            try:
-                self.extract_landmarks(file)
-            except LandmarksNotFoundException:
-                failed_files.add(file)
-        self.display_failed_files(failed_files)
-
-        self.save_landmarks_coordinates()
