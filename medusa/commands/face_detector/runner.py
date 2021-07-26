@@ -1,7 +1,7 @@
 from termcolor import cprint
 
+from medusa.abstract_models.abstract_runner import AbstractRunner
 from medusa.commands.face_detector.detector import FaceDetector
-from medusa.templates.runner_abstract import AbstractRunner
 
 
 class CommandRunner(AbstractRunner):
@@ -47,11 +47,11 @@ class CommandRunner(AbstractRunner):
             # temporary
             cprint(
                 f"Detector requires an --input-dir flag to specify directory of unconverted images. "
-                f"Using hardcoded path: /converted_images",
+                f"Using hardcoded path: converted_images",
                 "red"
             )
             self.main(
-                "/converted_images",
+                "converted_images",
                 args.output_dir,
                 img_size,
                 args.img_ext,

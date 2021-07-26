@@ -5,7 +5,7 @@ from os.path import join
 
 from termcolor import cprint, colored
 
-from medusa.handled_types.image_type import ImageExtension
+from medusa.definitions import ImageExtension
 
 
 def validate():
