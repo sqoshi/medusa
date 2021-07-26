@@ -17,6 +17,8 @@ class AbstractDetector(ABC):
     landmarks = {}
 
     def save_landmarks_coordinates(self):
+        print(self.landmarks)
+        print("should save cords", self.output_format)
         if self.output_format == LandmarksFormat.json:
             with open(f"{self.output_filename}.{self.output_format}", "w+") as fw:
                 json.dump(self.landmarks, fw)

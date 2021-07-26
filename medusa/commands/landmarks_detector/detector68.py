@@ -41,10 +41,11 @@ def shape_to_dict(shape):
 
 
 class Landmarks68Detector(DatasetAnalyzer, AbstractDetector):
-    def __init__(self, output_directory, predictor_filepath: Optional[str], logger):
+    def __init__(self, output_filename, output_format, predictor_filepath: Optional[str], logger):
         self.logger = logger
         self.detector = get_frontal_face_detector()
-
+        self.output_filename = output_filename  # "landmarks_5.json"
+        self.output_format = output_format
         if predictor_filepath:
             self.predictor = shape_predictor(predictor_filepath)
         else:

@@ -58,13 +58,12 @@ class CommandRunner(AbstractRunner):
 
     def main(self, path, predictor_filepath, detection_mode, output_filename, output_format, logger):
         if detection_mode == DetectionMode.basic:
-            d = Landmarks5Detector(output_filename, output_format, logger)
+            d = Landmarks5Detector(output_filename + "_5", output_format, logger)
             d.input(path)
             d.detect()
             logger.log_time("5-Landmarks detection")
         elif detection_mode == DetectionMode.extensive:
-            # todo: 68 landmark detection using `dlib`
-            d = Landmarks68Detector("", predictor_filepath, logger)
+            d = Landmarks68Detector(output_filename + "_68", output_format, predictor_filepath, logger)
             d.input(path)
             d.detect()
             logger.log_time("68-Landmarks detection")
